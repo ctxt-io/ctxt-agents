@@ -1,0 +1,49 @@
+name: ci
+on: [push, pull_request]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: All JSON files parse
+        run: |
+          set -e
+          find . -name '*.json' -not -path './.git/*' -print0 \
+            | xargs -0 -I{} python3 -m json.tool {} /dev/null
+
+      - name: Claude and Codex skill copies are identical
+        run: diff -r plugins/ctxt/skills codex/ctxt/skills
+
+      - name: Plugin manifest versions match
+        run: |
+          python3 - <<'EOF'
+          import json
+          claude = json.load(open('plugins/ctxt/.claude-plugin/plugin.json'))
+          codex = json.load(open('codex/ctxt/.codex-plugin/plugin.json'))
+          assert claude['version'] == codex['version'], (
+              'bump both manifests together: %s != %s'
+              % (claude['version'], codex['version']))
+          assert claude['name'] == codex['name'] == 'ctxt', (
+              'the plugin name is a permanent identifier')
+          EOF
+
+      - name: Codex marketplace policy enums are valid
+        run: |
+          python3 - <<'EOF'
+          import json
+          # JSON that parses can still carry invalid enums (an earlier
+          # revision shipped authentication=ON_FIRST_USE, which Codex
+          # rejects). Pin the currently documented values; replace this
+          # with a real `codex plugin marketplace validate` when one
+          # exists in CI-friendly form.
+          mp = json.load(open('.agents/plugins/marketplace.json'))
+          for p in mp['plugins']:
+              policy = p.get('policy', {})
+              inst = policy.get('installation')
+              auth = policy.get('authentication')
+              assert inst in ('AVAILABLE', 'INSTALLED_BY_DEFAULT',
+                              'NOT_AVAILABLE'), inst
+              assert auth in ('ON_INSTALL', 'ON_USE'), auth
+          EOF

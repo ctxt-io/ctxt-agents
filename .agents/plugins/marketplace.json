@@ -1,0 +1,21 @@
+{
+  "name": "ctxt",
+  "interface": {
+    "displayName": "ctxt.io"
+  },
+  "plugins": [
+    {
+      "name": "ctxt",
+      "source": {
+        "source": "local",
+        "path": "./codex/ctxt"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "Productivity",
+      "description": "Share text, markdown, code, or HTML as auto-expiring ctxt.io links"
+    }
+  ]
+}
