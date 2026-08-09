@@ -52,7 +52,7 @@ Rules for HTML that renders well on ctxt.io:
 
 - `url` — the share link; `.md` / `.txt` / `.json` twins at `markdown_url` / `text_url` / `json_url` for machine consumers.
 - `expires_at`, `current_ttl_seconds` — tell the user when it dies.
-- `delete_token` — a deletion capability for `delete_context`. Treat it like a secret: never embed it in shared content and don't print it next to the public URL by default — keep it available and surface it only when the user wants early deletion.
+- `delete_token` — the only way to delete the paste early; **there is no recovery if it is lost**. Your session is stateless: a token you don't hand to the user (or write to a durable private place) is gone when the turn ends, and the paste becomes undeletable until expiry. So always relay it — on its own line, after and visually separate from the share URL, labeled clearly: `Delete token (keep private — anyone holding it can delete this paste): …`. Never embed it in the shared content itself.
 - `pending_payment`, `payment_url` (and any advertised agent-payment capability) — present only on 30d/Pro creates.
 
 ## Other tools
