@@ -43,7 +43,10 @@ Rules for HTML that renders well on ctxt.io:
 2. **No JavaScript.** `<script>` tags are stripped server-side and inline handlers never execute (CSP). Don't waste bytes on interactivity — it will not run. Static HTML + CSS only.
 3. **Charts and diagrams as inline SVG.** Bar/line/pie charts, timelines, and diagrams work great as hand-written `<svg>` with inline styles.
 4. **CSS layout works.** Flexbox, grid, gradients, web-safe fonts all render.
-5. Keep it under 4MB.
+5. **Scope your CSS.** The paste renders inside ctxt.io's page chrome, not as a standalone document: wrap everything in one `<div class="my-report">`, prefix every selector with it, and set an explicit base `font-size` on it. Bare selectors like `body`, `main`, or `h2` leak onto the host page and inherit from it.
+6. **Symbols belong in markup, not CSS `content`.** Write `<span>→</span>`, not `li::before { content: "→" }` — markup text survives sanitization robustly and also appears in the `.txt`/`.md` twins, which never see CSS. If you must use CSS `content`, use ASCII escapes (`content: "\2192"`).
+7. **Verify the render, not just the words.** After publishing, fetch the returned URL (e.g. `read_context` with `format=html`) and check the markup survived sanitization as intended — don't assume.
+8. Keep it under 4MB.
 
 ## Result fields
 
