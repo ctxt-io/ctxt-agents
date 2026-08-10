@@ -1,5 +1,7 @@
 # ctxt.io for agents
 
+[![ci](https://github.com/ctxt-io/ctxt-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ctxt-io/ctxt-agents/actions/workflows/ci.yml)
+
 Share whatever your agent produces as auto-expiring links. This repo packages the [ctxt.io MCP server](https://ctxt.io/mcp/docs) for agent runtimes: a Claude Code plugin (MCP + `/share` command + skill), a Codex plugin, and install recipes for Cursor, VS Code, and claude.ai.
 
 - MCP endpoint: `https://ctxt.io/mcp` (streamable HTTP, no auth, no account)
