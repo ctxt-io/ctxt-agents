@@ -2,7 +2,7 @@
 
 [![ci](https://github.com/ctxt-io/ctxt-agents/actions/workflows/ci.yml/badge.svg)](https://github.com/ctxt-io/ctxt-agents/actions/workflows/ci.yml)
 
-Share whatever your agent produces as auto-expiring links. This repo packages the [ctxt.io MCP server](https://ctxt.io/mcp/docs) for agent runtimes: a Claude Code plugin (MCP + `/share` command + skill), a Codex plugin, and install recipes for Cursor, VS Code, and claude.ai.
+Share whatever your agent produces as auto-expiring links. This repo packages the [ctxt.io MCP server](https://ctxt.io/mcp/docs) for agent runtimes: a Claude Code plugin (MCP + `/share` command + skill), a Codex plugin, a Cursor plugin, and install recipes for VS Code and claude.ai.
 
 - MCP endpoint: `https://ctxt.io/mcp` (streamable HTTP, no auth, no account)
 - Tools: `create_context`, `read_context`, `delete_context`
@@ -48,7 +48,21 @@ cp -r codex/ctxt/skills/share ~/.agents/skills/ctxt-share
 
 ## Cursor
 
-Add to `.cursor/mcp.json` (project) or `~/.cursor/mcp.json` (global):
+One-click install (opens Cursor with the server pre-filled):
+
+[Add to Cursor](cursor://anysphere.cursor-deeplink/mcp/install?name=ctxt&config=eyJ1cmwiOiJodHRwczovL2N0eHQuaW8vbWNwIn0=)
+
+Cursor plugin (bundles the MCP server + the `/share` command + the share
+skill; lives in `cursor/ctxt/` with a `.cursor-plugin/plugin.json`
+manifest, and the repo root carries a `.cursor-plugin/marketplace.json`
+so the whole repo can be added as a marketplace):
+
+```
+Cursor → Settings → Tools & MCP → add marketplace → ctxt-io/ctxt-agents
+```
+
+MCP server only, by hand — add to `.cursor/mcp.json` (project) or
+`~/.cursor/mcp.json` (global):
 
 ```json
 {

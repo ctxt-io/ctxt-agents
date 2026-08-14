@@ -1,0 +1,22 @@
+{
+  "name": "ctxt",
+  "version": "0.1.2",
+  "description": "Share text, markdown, code, or HTML as auto-expiring ctxt.io links",
+  "author": {
+    "name": "Context",
+    "email": "github@ctxt.io"
+  },
+  "homepage": "https://ctxt.io/mcp/docs",
+  "repository": "https://github.com/ctxt-io/ctxt-agents",
+  "license": "MIT",
+  "keywords": [
+    "sharing",
+    "paste",
+    "links",
+    "expiring",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "mcpServers": "./mcp.json"
+}

@@ -1,0 +1,14 @@
+{
+  "name": "ctxt",
+  "owner": {
+    "name": "Context",
+    "email": "github@ctxt.io"
+  },
+  "plugins": [
+    {
+      "name": "ctxt",
+      "source": "./cursor/ctxt",
+      "description": "Share text, markdown, code, or HTML as auto-expiring ctxt.io links: MCP server, /share command, and a skill that teaches when and how to share (including HTML visual output)."
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "ctxt": {
+      "type": "http",
+      "url": "https://ctxt.io/mcp"
+    }
+  }
+}

@@ -13,8 +13,12 @@ jobs:
           find . -name '*.json' -not -path './.git/*' -print0 \
             | xargs -0 -I{} python3 -m json.tool {} /dev/null
 
-      - name: Claude and Codex skill copies are identical
-        run: diff -r plugins/ctxt/skills codex/ctxt/skills
+      - name: Claude, Codex and Cursor skill copies are identical
+        run: |
+          set -e
+          diff -r plugins/ctxt/skills codex/ctxt/skills
+          diff -r plugins/ctxt/skills cursor/ctxt/skills
+          diff -r plugins/ctxt/commands cursor/ctxt/commands
 
       - name: Plugin manifest versions match
         run: |
@@ -22,11 +26,32 @@ jobs:
           import json
           claude = json.load(open('plugins/ctxt/.claude-plugin/plugin.json'))
           codex = json.load(open('codex/ctxt/.codex-plugin/plugin.json'))
-          assert claude['version'] == codex['version'], (
-              'bump both manifests together: %s != %s'
-              % (claude['version'], codex['version']))
-          assert claude['name'] == codex['name'] == 'ctxt', (
+          cursor = json.load(open('cursor/ctxt/.cursor-plugin/plugin.json'))
+          versions = {'claude': claude['version'], 'codex': codex['version'],
+                      'cursor': cursor['version']}
+          assert len(set(versions.values())) == 1, (
+              'bump all three manifests together: %s' % versions)
+          assert claude['name'] == codex['name'] == cursor['name'] == 'ctxt', (
               'the plugin name is a permanent identifier')
+          EOF
+
+      - name: Every plugin points at the same MCP endpoint
+        run: |
+          python3 - <<'EOF'
+          import json
+          # Three files, three shapes: Claude and Cursor wrap servers in
+          # "mcpServers" (Cursor reads mcp.json at the plugin root, Claude
+          # .mcp.json), Codex names the server at the top level. Same
+          # endpoint though — drift would silently point one client at a
+          # dead URL.
+          urls = {}
+          for path in ('plugins/ctxt/.mcp.json', 'codex/ctxt/.mcp.json',
+                       'cursor/ctxt/mcp.json'):
+              cfg = json.load(open(path))
+              servers = cfg.get('mcpServers', cfg)
+              assert list(servers) == ['ctxt'], (path, list(servers))
+              urls[path] = servers['ctxt']['url']
+          assert set(urls.values()) == {'https://ctxt.io/mcp'}, urls
           EOF
 
       - name: Codex marketplace policy enums are valid
