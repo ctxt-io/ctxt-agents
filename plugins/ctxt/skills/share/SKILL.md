@@ -26,6 +26,8 @@ Default to `1h` unless the user says otherwise. Pick the shortest ttl that plaus
 1. The live tool result is authoritative: if it advertises an agent-payment capability that your platform actually supports, follow it to complete payment programmatically.
 2. Otherwise — the universal fallback — surface the `payment_url` and say plainly that a human has to open it in a browser to finish the checkout.
 
+A free-ttl paste is not a dead end either: a human can later upgrade it to 30-day Pro in a browser via the paste's `manage_url` (see Result fields). If the user wanted longer than the free tiers but balks at paying now, hand them the `manage_url` and tell them the upgrade stays available there while the paste is alive.
+
 ## Choosing format
 
 - `text` — verbatim, escaped. Default for logs, plain output.
@@ -52,7 +54,8 @@ Rules for HTML that renders well on ctxt.io:
 
 - `url` — the share link; `.md` / `.txt` / `.json` twins at `markdown_url` / `text_url` / `json_url` for machine consumers.
 - `expires_at`, `current_ttl_seconds` — tell the user when it dies.
-- `delete_token` — the only way to delete the paste early; **there is no recovery if it is lost**. Your session is stateless: a token you don't hand to the user (or write to a durable private place) is gone when the turn ends, and the paste becomes undeletable until expiry. So always relay it — on its own line, after and visually separate from the share URL, labeled clearly: `Delete token (keep private — anyone holding it can delete this paste): …`. Never embed it in the shared content itself.
+- `manage_url` — a browser page where a human can delete the paste or upgrade it to 30-day Pro later; the URL itself carries the delete capability, so no cookie or login is needed. Your session is stateless: a capability you don't hand to the user (or write to a durable private place) is gone when the turn ends, and the paste becomes unmanageable until expiry. So **always relay `manage_url`** — on its own line, after and visually separate from the share URL, labeled clearly: `Manage link (keep private — anyone holding it can delete this paste): …`. Never embed it in the shared content itself.
+- `delete_token` — the same capability in raw form, for calling `delete_context` yourself; it is embedded in `manage_url`, so relaying the manage link covers the human side. **There is no recovery if it is lost.**
 - `pending_payment`, `payment_url` (and any advertised agent-payment capability) — present only on 30d/Pro creates.
 
 ## Other tools
