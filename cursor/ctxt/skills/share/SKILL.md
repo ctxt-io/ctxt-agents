@@ -54,7 +54,14 @@ Rules for HTML that renders well on ctxt.io:
 
 - `url` — the share link; `.md` / `.txt` / `.json` twins at `markdown_url` / `text_url` / `json_url` for machine consumers.
 - `expires_at`, `current_ttl_seconds` — tell the user when it dies.
-- `manage_url` — a browser page where a human can delete the paste or upgrade it to 30-day Pro later; the URL itself carries the delete capability, so no cookie or login is needed. Your session is stateless: a capability you don't hand to the user (or write to a durable private place) is gone when the turn ends, and the paste becomes unmanageable until expiry. So **always relay `manage_url`** — on its own line, after and visually separate from the share URL, labeled clearly: `Manage link (keep private — anyone holding it can delete this paste): …`. Never embed it in the shared content itself.
+- `manage_url` — lets a human delete the paste or upgrade it to 30-day Pro later; the URL itself carries the delete capability, so no cookie or login is needed (it lands on the paste with the Manage menu unlocked). Your session is stateless: a capability you don't hand to the user (or write to a durable private place) is gone when the turn ends, and the paste becomes unmanageable until expiry. So **always relay `manage_url`**, as a plain line directly under the share URL — matching styling, no extra emphasis that could make it look like the link to share:
+
+  ```
+  Paste link to share: <url>
+  Manage with: <manage_url> (keep private — it can delete the paste)
+  ```
+
+  Never embed it in the shared content itself.
 - `delete_token` — the same capability in raw form, for calling `delete_context` yourself; it is embedded in `manage_url`, so relaying the manage link covers the human side. **There is no recovery if it is lost.**
 - `pending_payment`, `payment_url` (and any advertised agent-payment capability) — present only on 30d/Pro creates.
 
