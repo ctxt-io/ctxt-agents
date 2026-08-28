@@ -54,18 +54,18 @@ Rules for HTML that renders well on ctxt.io:
 
 - `url` — the share link; `.md` / `.txt` / `.json` twins at `markdown_url` / `text_url` / `json_url` for machine consumers.
 - `expires_at`, `current_ttl_seconds` — tell the user when it dies.
-- `manage_url` — lets a human delete the paste or upgrade it to 30-day Pro later; the URL itself carries the delete capability, so no cookie or login is needed (it lands on the paste with the Manage menu unlocked). Your session is stateless: a capability you don't hand to the user (or write to a durable private place) is gone when the turn ends, and the paste becomes unmanageable until expiry. So **always relay `manage_url`**, as a plain line below the share URL, separated by one blank line — matching styling, no extra emphasis that could make it look like the link to share:
+- `manage_url` — the share URL with `?t=<delete_token>` appended: opening it in a browser unlocks delete/upgrade for the paste, no cookie or login needed. Your session is stateless: a capability you don't hand to the user (or write to a durable private place) is gone when the turn ends, and the paste becomes unmanageable until expiry. So **always relay the token**, as a plain second line that deliberately contains no URL — the share link stays the only link in the output:
 
   ```
   Paste link to share: `<url>`
 
-  Manage with: `<manage_url>` (keep private — it can delete the paste)
+  Delete or upgrade later: append `?t=<delete_token>` to it (keep the token private)
   ```
 
-  Wrap each URL in backticks and keep the blank line between the two lines, exactly as shown: code spans make the links stand out in markdown-rendering harnesses (a bare URL renders as unstyled plain text), and the blank line keeps them separate paragraphs (a single newline is a soft break that some renderers collapse into one run-on line).
+  Substitute the real 8-char token, wrap the URL and the `?t=` fragment in backticks, and keep the blank line between the lines, exactly as shown: code spans stand out in markdown-rendering harnesses (bare text renders unstyled), and the blank line keeps the lines separate paragraphs (a single newline is a soft break that some renderers collapse into one run-on line).
 
-  Never embed it in the shared content itself.
-- `delete_token` — the same capability in raw form, for calling `delete_context` yourself; it is embedded in `manage_url`, so relaying the manage link covers the human side. **There is no recovery if it is lost.**
+  Never embed the token in the shared content itself.
+- `delete_token` — the same 8-char capability in raw form, for calling `delete_context` yourself. **There is no recovery if it is lost.**
 - `pending_payment`, `payment_url` (and any advertised agent-payment capability) — present only on 30d/Pro creates.
 
 ## Other tools
