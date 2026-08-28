@@ -1,6 +1,6 @@
 {
   "name": "ctxt",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Share text, markdown, code, or HTML as auto-expiring ctxt.io links",
   "author": {
     "name": "Context",
