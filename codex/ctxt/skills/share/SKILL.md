@@ -13,7 +13,7 @@ ctxt.io turns content into an auto-expiring link in one call. Use the `create_co
 - Output is too long to paste into a chat/issue/commit message.
 - The user wants a throwaway rendering of a report, table, or diagram.
 
-Links are bearer-accessible by default — anyone holding the URL can read them; password-protected (Pro) links additionally require the password. Never share secrets, credentials, or private data without the user's explicit say-so.
+Links are bearer-accessible by default — anyone holding the URL can read them; password-protected (Pro) links additionally require the password. Never share secrets, credentials, or private data without the user's explicit say-so. And when the scope of what to publish is at all ambiguous ("share this", "share the output"), state exactly what you intend to publish — a file name, or a one-line description plus size — and get confirmation before sharing.
 
 ## Choosing ttl
 

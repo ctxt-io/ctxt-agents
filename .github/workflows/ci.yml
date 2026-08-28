@@ -18,7 +18,11 @@ jobs:
           set -e
           diff -r plugins/ctxt/skills codex/ctxt/skills
           diff -r plugins/ctxt/skills cursor/ctxt/skills
-          diff -r plugins/ctxt/commands cursor/ctxt/commands
+
+      - name: No legacy commands directories (skills already register the slash command)
+        run: |
+          set -e
+          ! find plugins cursor codex -type d -name commands | grep .
 
       - name: Plugin manifest versions match
         run: |

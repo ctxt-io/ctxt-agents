@@ -12,7 +12,7 @@
     {
       "name": "ctxt",
       "source": "./plugins/ctxt",
-      "description": "Share text, markdown, code, or HTML as auto-expiring ctxt.io links: MCP server, /share command, and a skill that teaches when and how to share (including HTML visual output)."
+      "description": "Share text, markdown, code, or HTML as auto-expiring ctxt.io links: MCP server plus a share skill that teaches when and how to share (including HTML visual output) and registers the /ctxt:share command."
     }
   ]
 }

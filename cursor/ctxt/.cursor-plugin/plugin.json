@@ -1,6 +1,6 @@
 {
   "name": "ctxt",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Share text, markdown, code, or HTML as auto-expiring ctxt.io links",
   "author": {
     "name": "Context",
@@ -17,6 +17,5 @@
     "mcp"
   ],
   "skills": "./skills/",
-  "commands": "./commands/",
   "mcpServers": "./mcp.json"
 }
