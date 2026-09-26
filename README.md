@@ -10,17 +10,26 @@ Share whatever your agent produces as auto-expiring links. This repo packages th
 
 ## Claude Code (plugin — recommended)
 
-```
-/plugin marketplace add ctxt-io/ctxt-agents
-/plugin install ctxt@ctxt
-```
+Run these one at a time in Claude Code (pasting both lines at once doesn't work):
+
+1. Add the marketplace:
+
+   ```
+   /plugin marketplace add ctxt-io/ctxt-agents
+   ```
+
+2. Install the plugin:
+
+   ```
+   /plugin install ctxt@ctxt
+   ```
 
 You get the MCP server and a share skill that teaches Claude when to share and how to produce good-looking HTML output (self-contained HTML + inline SVG — scripts are stripped server-side, so static only). The skill also registers the `/ctxt:share` slash command.
 
-MCP server only, no plugin:
+MCP server only, no plugin (`--scope user` makes it available in every project; drop it to add it to the current project only):
 
 ```
-claude mcp add --transport http ctxt https://ctxt.io/mcp
+claude mcp add --scope user --transport http ctxt https://ctxt.io/mcp
 ```
 
 ## Codex
