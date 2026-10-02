@@ -70,5 +70,5 @@ Rules for HTML that renders well on ctxt.io:
 
 ## Other tools
 
-- `read_context` — fetch an existing ctxt.io link (URL, `/3/<code>` path, or bare code); pass `password` for protected links.
+- `read_context` — fetch an existing ctxt.io link (URL, `/3/<code>` path, or bare code); For a protected link, set the `password` argument to the value the user supplies for that link.
 - `delete_context` — delete early; requires the `delete_token` from creation.

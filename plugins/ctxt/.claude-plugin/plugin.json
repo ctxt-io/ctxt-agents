@@ -1,6 +1,6 @@
 {
   "name": "ctxt",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Share text, markdown, code, or HTML as auto-expiring ctxt.io links",
   "author": {
     "name": "Subnets LLC",
