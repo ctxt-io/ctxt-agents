@@ -1,6 +1,6 @@
 ---
 name: share
-description: Share content as an auto-expiring ctxt.io link. Use when the user wants to share output with someone, hand off text/code/results to another person or machine, publish a quick visual report, or asks for "a link" to something you produced. Covers choosing ttl/format, HTML visual output, and the $1 30-day payment flow.
+description: Share content as an auto-expiring ctxt.io link. Use when the user wants to share output with someone, hand off text/code/results to another person or machine, publish a quick visual report, or asks for "a link" to something you produced. Covers choosing ttl/format, HTML visual output, and the USD 1 30-day payment flow.
 ---
 
 # Sharing via ctxt.io
@@ -17,11 +17,11 @@ Links are bearer-accessible by default — anyone holding the URL can read them;
 
 ## Choosing ttl
 
-Free: `5m`, `30m`, `1h` (default), `8h`, `1d`. Paid: `30d` costs $1 one-time.
+Free: `5m`, `30m`, `1h` (default), `8h`, `1d`. Paid: `30d` costs USD 1 one-time.
 
 Default to `1h` unless the user says otherwise. Pick the shortest ttl that plausibly covers the audience's reading window — expiry is the product, not a limitation.
 
-**30d / Pro flow**: the link is created immediately but in a pending state (lives 1 day unpaid). After the $1 payment the link lasts 30 days and Pro options (name slug, password) activate. Payment paths, in order:
+**30d / Pro flow**: the link is created immediately but in a pending state (lives 1 day unpaid). After the USD 1 payment the link lasts 30 days and Pro options (name slug, password) activate. Payment paths, in order:
 
 1. The live tool result is authoritative: if it advertises an agent-payment capability that your platform actually supports, follow it to complete payment programmatically.
 2. Otherwise — the universal fallback — surface the `payment_url` and say plainly that a human has to open it in a browser to finish the checkout.

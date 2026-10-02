@@ -1,10 +1,10 @@
 {
   "name": "ctxt",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Share text, markdown, code, or HTML as auto-expiring ctxt.io links",
   "author": {
-    "name": "Context",
-    "email": "github@ctxt.io",
+    "name": "Subnets LLC",
+    "email": "feedback@ctxt.io",
     "url": "https://ctxt.io"
   },
   "homepage": "https://ctxt.io/mcp/docs",
@@ -16,5 +16,11 @@
     "links",
     "expiring",
     "mcp"
-  ]
+  ],
+  "displayName": "Context — ctxt.io",
+  "icon": "./.claude-plugin/icon.png",
+  "documentationUrl": "https://ctxt.io/mcp/docs",
+  "supportUrl": "https://ctxt.io/faq",
+  "privacyPolicyUrl": "https://ctxt.io/privacy",
+  "termsOfServiceUrl": "https://ctxt.io/tos"
 }
