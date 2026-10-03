@@ -1,32 +1,24 @@
 ---
 name: share
-description: Share content as an auto-expiring ctxt.io link. Use when the user wants to share output with someone, hand off text/code/results to another person or machine, publish a quick visual report, or asks for "a link" to something you produced. Covers choosing ttl/format, HTML visual output, and the USD 1 30-day payment flow.
+description: Share user-selected text, markdown, code, or static HTML as a free auto-expiring ctxt.io link. Use for sharing output, handing off results, or publishing a visual report with inline CSS and SVG.
 ---
 
 # Sharing via ctxt.io
 
-ctxt.io turns content into an auto-expiring link in one call. Use the `create_context` MCP tool (server: `ctxt`, `https://ctxt.io/mcp`). The live tool schema and tool results are authoritative — if they differ from this document, follow them.
+Use the `create_context` MCP tool (server: `ctxt`, `https://ctxt.io/mcp/openai`). The live tool schema and results are authoritative. This plugin uses the public, free service profile with durations up to one day.
 
 ## When to share
 
-- The user asks for a link, or wants to send something to a person, chat, or another agent.
-- Output is too long to paste into a chat/issue/commit message.
-- The user wants a throwaway rendering of a report, table, or diagram.
+- The user asks for a link or wants to send selected content to a person, chat, or another agent.
+- The user wants a temporary rendering of a report, table, or diagram.
 
-Links are bearer-accessible by default — anyone holding the URL can read them; password-protected (Pro) links additionally require the password. Never share secrets, credentials, or private data without the user's explicit say-so. And when the scope of what to publish is at all ambiguous ("share this", "share the output"), state exactly what you intend to publish — a file name, or a one-line description plus size — and get confirmation before sharing.
+Publish only content the user explicitly asks to share. Anyone holding the URL can read it. Exclude secrets, credentials, and sensitive personal information. When the requested content is ambiguous, state exactly what you intend to publish — a file name or a description plus size — and get confirmation before sharing.
 
 ## Choosing ttl
 
-Free: `5m`, `30m`, `1h` (default), `8h`, `1d`. Paid: `30d` costs USD 1 one-time.
+Available: `5m`, `30m`, `1h` (default), `8h`, `1d`.
 
-Default to `1h` unless the user says otherwise. Pick the shortest ttl that plausibly covers the audience's reading window — expiry is the product, not a limitation.
-
-**30d / Pro flow**: the link is created immediately but in a pending state (lives 1 day unpaid). After the USD 1 payment the link lasts 30 days and Pro options (name slug, password) activate. Payment paths, in order:
-
-1. The live tool result is authoritative: if it advertises an agent-payment capability that your platform actually supports, follow it to complete payment programmatically.
-2. Otherwise — the universal fallback — surface the `payment_url` and say plainly that a human has to open it in a browser to finish the checkout.
-
-A free-ttl paste is not a dead end either: a human can later upgrade it to 30-day Pro in a browser via the paste's `manage_url` (see Result fields). If the user wanted longer than the free tiers but balks at paying now, hand them the `manage_url` and tell them the upgrade stays available there while the paste is alive.
+Default to `1h` unless the user specifies a supported duration. Choose the shortest duration that covers the audience's reading window. If the user asks for longer than one day, explain the available durations and ask which they prefer.
 
 ## Choosing format
 
@@ -52,23 +44,21 @@ Rules for HTML that renders well on ctxt.io:
 
 ## Result fields
 
-- `url` — the share link; `.md` / `.txt` / `.json` twins at `markdown_url` / `text_url` / `json_url` for machine consumers.
-- `expires_at`, `current_ttl_seconds` — tell the user when it dies.
-- `manage_url` — the share URL with `?t=<delete_token>` appended: opening it in a browser unlocks delete/upgrade for the paste, no cookie or login needed. Your session is stateless: a capability you don't hand to the user (or write to a durable private place) is gone when the turn ends, and the paste becomes unmanageable until expiry. So **always relay the token**, as a plain second line that deliberately contains no URL — the share link stays the only link in the output:
+- `url` — the public share link. `markdown_url`, `text_url`, and `json_url` provide machine-readable representations.
+- `expires_at`, `current_ttl_seconds` — tell the user when access ends.
+- `delete_token` — a private capability for `delete_context`. There is no recovery if it is lost. Give it to the user separately from the public link and never embed it in shared content:
 
   ```
   Paste link to share: `<url>`
 
-  Delete or upgrade later: append `?t=<delete_token>` to it (keep the token private)
+  Private deletion token: `<delete_token>` (keep it private)
   ```
 
-  Substitute the real 8-char token, wrap the URL and the `?t=` fragment in backticks, and keep the blank line between the lines, exactly as shown: code spans stand out in markdown-rendering harnesses (bare text renders unstyled), and the blank line keeps the lines separate paragraphs (a single newline is a soft break that some renderers collapse into one run-on line).
+  Substitute the actual values and keep the blank line between the public link and private token. Use `delete_context` only when the user requests deletion.
 
-  Never embed the token in the shared content itself.
-- `delete_token` — the same 8-char capability in raw form, for calling `delete_context` yourself. **There is no recovery if it is lost.**
-- `pending_payment`, `payment_url` (and any advertised agent-payment capability) — present only on 30d/Pro creates.
+Link expiry ends public access; it does not promise immediate erasure of all backing records. Retention and deletion details are at https://ctxt.io/privacy.
 
 ## Other tools
 
-- `read_context` — fetch an existing ctxt.io link (URL, `/3/<code>` path, or bare code); For a protected link, set the `password` argument to the value the user supplies for that link.
-- `delete_context` — delete early; requires the `delete_token` from creation.
+- `read_context` — read a public ctxt.io link as markdown, text, or HTML. Accepts a URL, `/3/<code>` path, or bare code. Protected, expired, and deleted links are unavailable through this plugin.
+- `delete_context` — revoke a link early at the user's request using its identifier and the private `delete_token` returned at creation.

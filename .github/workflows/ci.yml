@@ -13,11 +13,10 @@ jobs:
           find . -name '*.json' -not -path './.git/*' -print0 \
             | xargs -0 -I{} python3 -m json.tool {} /dev/null
 
-      - name: Claude, Codex and Cursor skill copies are identical
+      - name: Codex and Cursor general-service skill copies are identical
         run: |
           set -e
-          diff -r plugins/ctxt/skills codex/ctxt/skills
-          diff -r plugins/ctxt/skills cursor/ctxt/skills
+          diff -r codex/ctxt/skills cursor/ctxt/skills
 
       - name: No legacy commands directories (skills already register the slash command)
         run: |
@@ -39,15 +38,15 @@ jobs:
               'the plugin name is a permanent identifier')
           EOF
 
-      - name: Every plugin points at the same MCP endpoint
+      - name: Every plugin points at its intended MCP endpoint
         run: |
           python3 - <<'EOF'
           import json
           # Three files, three shapes: Claude and Cursor wrap servers in
           # "mcpServers" (Cursor reads mcp.json at the plugin root, Claude
-          # .mcp.json), Codex names the server at the top level. Same
-          # endpoint though — drift would silently point one client at a
-          # dead URL.
+          # .mcp.json), Codex names the server at the top level.
+          # Claude uses the free directory profile; Codex and Cursor
+          # retain the general-service profile.
           urls = {}
           for path in ('plugins/ctxt/.mcp.json', 'codex/ctxt/.mcp.json',
                        'cursor/ctxt/mcp.json'):
@@ -55,7 +54,11 @@ jobs:
               servers = cfg.get('mcpServers', cfg)
               assert list(servers) == ['ctxt'], (path, list(servers))
               urls[path] = servers['ctxt']['url']
-          assert set(urls.values()) == {'https://ctxt.io/mcp'}, urls
+          assert urls == {
+              'plugins/ctxt/.mcp.json': 'https://ctxt.io/mcp/openai',
+              'codex/ctxt/.mcp.json': 'https://ctxt.io/mcp',
+              'cursor/ctxt/mcp.json': 'https://ctxt.io/mcp',
+          }, urls
           EOF
 
       - name: Codex marketplace policy enums are valid

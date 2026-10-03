@@ -4,9 +4,10 @@
 
 Share whatever your agent produces as auto-expiring links. This repo packages the [ctxt.io MCP server](https://ctxt.io/mcp/docs) for agent runtimes: a Claude Code plugin (MCP + share skill), a Codex plugin, a Cursor plugin, and install recipes for VS Code and claude.ai.
 
-- MCP endpoint: `https://ctxt.io/mcp` (streamable HTTP, no auth, no account)
+- Claude directory plugin: `https://ctxt.io/mcp/openai` (free public links, no ads or checkout). The endpoint is usable by any MCP client.
+- General MCP endpoint: `https://ctxt.io/mcp` (Codex, Cursor, and direct clients; streamable HTTP, no auth, no account)
 - Tools: `create_context`, `read_context`, `delete_context`
-- Free expiries: 5m – 1d. `ttl=30d` and Pro options (name, password) cost $1 one-time; the tool result says how payment completes — a `payment_url` a human opens, plus any agent-payment capability the server currently advertises.
+- Free expiries: 5m – 1d. On the general endpoint, `ttl=30d` and Pro options (name, password) cost $1 one-time; the tool result says how payment completes — a `payment_url` a human opens, plus any agent-payment capability the server currently advertises.
 
 ## Claude Code (plugin — recommended)
 
@@ -24,12 +25,12 @@ Run these one at a time in Claude Code (pasting both lines at once doesn't work)
    /plugin install ctxt@ctxt
    ```
 
-You get the MCP server and a share skill that teaches Claude when to share and how to produce good-looking HTML output (self-contained HTML + inline SVG — scripts are stripped server-side, so static only). The skill also registers the `/ctxt:share` slash command.
+You get the MCP server and a share skill that teaches Claude when to share and how to produce good-looking HTML output (self-contained HTML + inline SVG — scripts are stripped server-side, so static only). The skill also registers the `/ctxt:share` slash command. This bundle uses the free directory endpoint with public links lasting up to one day. See [the plugin README](plugins/ctxt/README.md) for data handling and retention.
 
 MCP server only, no plugin (`--scope user` makes it available in every project; drop it to add it to the current project only):
 
 ```
-claude mcp add --scope user --transport http ctxt https://ctxt.io/mcp
+claude mcp add --scope user --transport http ctxt https://ctxt.io/mcp/openai
 ```
 
 ## Codex
@@ -105,6 +106,7 @@ Point it at `https://ctxt.io/mcp`: stateless streamable HTTP, plain JSON respons
 
 - Links are bearer-accessible by default — anyone holding the URL can read them; password-protected (Pro) links additionally require the password. Don't share secrets.
 - The `delete_token` returned at creation is a deletion capability. Treat it as a secret and keep it out of shared content.
+- Claude has a directory-specific sharing skill. Codex and Cursor keep identical general-service skills; CI checks both variants point at their intended endpoints.
 - Releasing: bump `version` in **all three** plugin manifests together (Claude only updates installed plugins when the version changes) and tag the release; CI checks the manifests stay in sync.
 - Docs: https://ctxt.io/mcp/docs · Terms: https://ctxt.io/tos · Privacy: https://ctxt.io/privacy
 - Security reports: see [SECURITY.md](SECURITY.md).

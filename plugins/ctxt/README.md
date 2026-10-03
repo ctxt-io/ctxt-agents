@@ -18,22 +18,22 @@ Run these commands one at a time inside Claude Code:
 /plugin install ctxt@ctxt
 ```
 
-The plugin connects to `https://ctxt.io/mcp` over HTTPS using Streamable HTTP.
+The plugin connects to `https://ctxt.io/mcp/openai` over HTTPS using Streamable HTTP.
 After installation, ask Claude to share content or use `/ctxt:share`.
 
 ## Tools and link durations
 
 - `create_context` publishes the content supplied to it and returns a share
   URL, expiry, and private deletion token.
-- `read_context` reads an existing ctxt.io link as markdown, text, or HTML.
-  Password-protected links require the password.
+- `read_context` reads a public ctxt.io link as markdown, text, or HTML.
+  Protected, expired, and deleted links are unavailable through this plugin.
 - `delete_context` revokes a link using its deletion token. Deletion removes
   public access immediately and requests backing-content deletion.
 
-Free durations are 5 minutes, 30 minutes, 1 hour, 8 hours, and 1 day. The default
-is 1 hour. The current general endpoint also offers a paid 30-day option with
-an optional name and password for USD 1. Its result explains how payment completes;
-follow the live tool schema and result for the available payment capabilities.
+Available durations are 5 minutes, 30 minutes, 1 hour, 8 hours, and 1 day.
+The default is 1 hour. Links created through this plugin are free and have no
+advertising or upgrade controls. This service profile provides public sharing,
+reading, and deletion; it does not offer checkout or protected links.
 
 Text is displayed verbatim, markdown renders as rich text, and code supports
 syntax highlighting. For a styled report, use static HTML with inline CSS and
@@ -51,24 +51,33 @@ within the server's 4 MB limit.
 ## Privacy and data handling
 
 The plugin sends the content supplied to `create_context`, along with its
-format and duration, to ctxt.io. Reading sends a ctxt.io URL or code and, where
-needed, a password. Deletion sends the link identifier and deletion token.
+format and duration, to ctxt.io. Reading sends a public ctxt.io URL or code.
+Deletion sends the link identifier and deletion token.
 The package has no hooks, background jobs, local MCP server, or installation
 scripts; the sharing skill uses the declared remote MCP service.
 
-Anyone holding an unprotected share URL can read its content. Share only
+Anyone holding a share URL can read its content. Share only
 content you intend to make public, and exclude credentials, secrets, and
-sensitive personal information. Password protection controls access; it does
-not encrypt stored content. Keep `delete_token` separate from the public URL
+sensitive personal information. Keep `delete_token` separate from the public URL
 and out of the shared content. It authorizes deletion and cannot be recovered
 if lost.
 
-Link expiry controls public access, rather than promising immediate erasure
-of every stored record. The service records request metadata and processes
-content for abuse detection. See the [Privacy Policy](https://ctxt.io/privacy)
-for storage, processing, third-party sharing, retention, and deletion requests.
-Links created through the current general endpoint may display Context ads
-and upgrade controls.
+Context stores the submitted content, which may include personal data the
+user puts in it, and request metadata. Link expiry controls public access;
+it does not promise immediate erasure of every stored record. Link metadata,
+including creation time and the creator's network address, can remain beyond
+30 days until administratively removed. Paste-content abuse-detection logs
+are retained for 3 days, application and request logs for 30 days, and deleted
+storage objects can remain recoverable for a further 7 days. Cleanup is
+asynchronous.
+
+The service uses Google Cloud hosting and storage and may process content
+through third-party abuse-detection providers, as described in the
+[Privacy Policy](https://ctxt.io/privacy). Submitted content is not used to
+train or fine-tune generative AI models. The skill contacts only the declared
+ctxt.io MCP connector. Contact feedback@ctxt.io for personal-data deletion or
+correction requests. This plugin is not intended specifically for users
+under 18.
 
 ## Troubleshooting and support
 

@@ -2,7 +2,7 @@
   "mcpServers": {
     "ctxt": {
       "type": "http",
-      "url": "https://ctxt.io/mcp"
+      "url": "https://ctxt.io/mcp/openai"
     }
   }
 }
